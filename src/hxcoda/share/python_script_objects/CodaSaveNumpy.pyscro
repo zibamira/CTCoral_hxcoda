@@ -1,0 +1,52 @@
+import numpy as np
+
+
+class CodaSaveNumpy(PyScriptObject):
+    """Saves an Amira field in Numpy ``*.npy`` file at a given path. 
+    """
+
+    def __init__(self):
+        """ """
+        # XXX: Just registering HxField3 did not work. So I added the more
+        # specific data types.
+        self.data.valid_types = [
+            "HxRegField3", 
+            "HxUniformScalarField3", 
+            "HxUniformLabelField3",
+            "HxUniformVectorField3"
+        ]
+
+        self.do_it = HxPortDoIt(self, "apply", "Apply")
+
+        self.path = HxPortFilename(self, "path", "Path")
+        self.path.mode = HxPortFilename.ANY_FILE
+        self.path.registerfiletype("Numpy", "npy", 1)
+        self.path.registerfiletype("All files", "*", 1)
+        return None
+
+    def update(self):
+        return None
+
+    def compute(self):
+        """Save the field at the given path."""
+        if not self.do_it.was_hit:
+            return None
+
+        field = self.data.source()
+        if field is None:   
+            print("The 'data' input port is not connected.")
+            return None
+        
+        array = field.get_array()
+        if array is None:
+            print("The 'data' input port must be connected to an HxRegField3 type.")
+            return None
+        
+        path = self.path.filenames
+        if not path:
+            print("A storage 'path' is required.")
+            return None
+        
+        np.save(path, array)
+        print(f"Saved '{field.name}' at '{path}'.")
+        return None

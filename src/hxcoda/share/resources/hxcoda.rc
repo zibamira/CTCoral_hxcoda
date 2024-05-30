@@ -1,0 +1,61 @@
+module -name "Coda Edge" \
+       -primary "HxSpreadSheet HxSpatialGraph HxLabelAnalysis HxUniformScalarField3 HxUniformVectorField3" \
+       -class "HxCodaEdge" \
+       -category "Compute" \
+       -package "hxcoda"
+
+module -name "Coda Edge Colormap" \
+       -primary "HxColormap HxVolumeRender2 HxLineRaycast HxLabelAnalysis HxUniformScalarField3 HxUniformVectorField3" \
+       -class "HxCodaEdgeColormap" \
+       -category "Compute" \
+       -package "hxcoda"
+
+module -name "Coda Vertex" \
+       -primary "HxSpreadSheet HxSpatialGraph HxLabelAnalysis HxUniformScalarField3 HxUniformVectorField3" \
+       -class "HxCodaVertex" \
+       -category "Compute" \
+       -package "hxcoda"
+
+module -name "Coda Vertex Colormap" \
+       -primary "HxColormap HxVolumeRender2 HxLineRaycast HxLabelAnalysis HxUniformScalarField3 HxUniformVectorField3" \
+       -class "HxCodaVertexColormap" \
+       -category "Compute" \
+       -package "hxcoda"
+
+module -name "Coda Graph" \
+       -primary "HxSpatialGraph" \
+       -class "HxCodaGraph" \
+       -category "Compute" \
+       -package "hxcoda"
+
+module -name "Coda Edge-Filter" \
+       -primary "HxSpreadSheet HxSpatialGraph HxUniformLabelField3" \
+       -class "HxCodaEdgeFilter" \
+       -category "Compute" \
+       -package "hxcoda"
+
+module -name "Coda Vertex-Filter" \
+       -primary "HxSpreadSheet HxSpatialGraph HxUniformLabelField3" \
+       -class "HxCodaVertexFilter" \
+       -category "Compute" \
+       -package "hxcoda"
+
+module -name "Coda Vertex-Selection" \
+       -primary "HxSpreadSheet" \
+       -class "HxCodaVertexSelection" \
+       -category "Compute" \
+       -package "hxcoda"
+
+module -name "Coda Load Numpy" \
+       -language "python" \
+       -file "share/python_script_objects/CodaLoadNumpy.pyscro" \
+       -primary "HxUniformLabelField3 HxUniformScalarField3 HxUniformVectorField3" \
+       -package "hxcoda" \
+       -category "Compute"
+
+module -name "Coda Save Numpy" \
+       -language "python" \
+       -file "share/python_script_objects/CodaSaveNumpy.pyscro" \
+       -primary "HxUniformLabelField3 HxUniformScalarField3 HxUniformVectorField3" \
+       -package "hxcoda" \
+       -category "Compute"

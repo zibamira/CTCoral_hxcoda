@@ -1,0 +1,71 @@
+import pathlib
+import numpy as np
+
+
+class CodaLoadNumpy(PyScriptObject):
+    """Loads an Amira field from a given Numpy ``*.npy`` file. 
+    
+    The attached array is used as a blueprint for the arrays geometry.
+    """
+
+    def __init__(self):
+        """ """
+        # XXX: Just registering HxField3 did not work. So I added the more
+        # specific data types.
+        self.data.valid_types = [
+            "HxRegField3", 
+            "HxUniformScalarField3", 
+            "HxUniformLabelField3",
+            "HxUniformVectorField3"
+        ]
+
+        self.do_it = HxPortDoIt(self, "apply", "Apply")
+
+        self.path = HxPortFilename(self, "path", "Path")
+        self.path.mode = HxPortFilename.EXISTING_FILE
+        self.path.registerfiletype("Numpy", "npy", 1)
+        self.path.registerfiletype("Numpy", "npz", 1)
+        self.path.registerfiletype("All files", "*", 1)
+        return None
+
+    def update(self):
+        return None
+
+    def compute(self):
+        """Load the field from the given path."""
+        if not self.do_it.was_hit:
+            return None
+        
+        # Determine the bounding box of the volume.
+        bounding_box = None
+
+        field = self.data.source()
+        if bounding_box is None and field is not None:
+            bounding_box = field.bounding_box
+
+        # Check if a path is provided.
+        path = self.path.filenames
+        if not path:
+            print("A 'path' to a Numpy array is required.")
+            return None
+
+        path = pathlib.Path(path)
+        
+        # Load the array.
+        # TODO: Make sure it's 3D.
+        array = np.load(path)
+
+        # Create the output field.
+        result = self.results[0]
+        if result is None:
+            result = hx_object_factory.create("HxUniformScalarField3")
+            result.name = f"{path.name}"
+
+        if bounding_box is not None:
+            result.bounding_box = bounding_box
+
+        result.set_array(array)
+        self.results[0] = result
+
+        print(f"Loaded '{result.name}' from '{path}'.")
+        return None
